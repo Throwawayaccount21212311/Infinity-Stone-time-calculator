@@ -46,12 +46,7 @@ while charge < chargereq:
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
-timesecspeed = priorspeed - speedbartime
-timesecprod = priorprod - prodbartime
-if timesecprod > timesecspeed:
-    timesec = timesecprod
-else:
-    timesec = timesecspeed
+timesec = priorextr - extrbartime
 days = timesec // 86400
 timesec = timesec % 86400
 hours = timesec // 3600
