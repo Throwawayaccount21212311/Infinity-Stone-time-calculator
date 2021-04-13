@@ -30,25 +30,29 @@ extrbarstart = extrbartime
 speedbartime = 31536000 / speedinf * (0.9 ** speedspeed)
 prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
 speedincrease = 1
-prodincrease = 0
+prodincrease = 1
 extramount = 0.01
+extramountstart = extramount
 priorextr = extrbartime
 priorspeed = speedbartime
 priorprod = prodbartime
 charge = 0
 while charge < chargereq:
     while priorspeed < priorextr:
+        while priorprod < priorextr:
+            prodincrease = prodincrease + prodperc * 0.025 + 0.05
+            extramount = extramountstart * prodincrease
+            priorprod = priorprod + prodbartime
         priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
         speedincrease = speedincrease + 0.01 * (speedperc + 2)
         extrbartime = extrbarstart / speedincrease
-        priorspeed = priorspeed + speedbartime
+        priorspeed = priorspeed + speedbartime 
     while priorprod < priorextr:
-        extramount = extramount + round(0.01 * (1.05 + 0.025 * prodperc), 3)
         prodincrease = prodincrease + prodperc * 0.025 + 0.05
+        extramount = extramountstart * prodincrease
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
-print(prodincrease * 100, speedincrease * 100)
 timesec = priorextr - extrbartime
 days = timesec // 86400
 timesec = timesec % 86400
