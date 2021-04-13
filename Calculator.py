@@ -25,11 +25,12 @@ prodperc = findupgrades(8, 1.15, int(input('How much does the next production bo
 extrspeed = findupgrades(15, 1.17, int(input('How much does the next extraction duration upgrade cost? ')))
 speedspeed = findupgrades(30, 1.22, int(input('How much does the next speed duration upgrade cost? ')))
 prodspeed = findupgrades(10, 1.15, int(input('How much does the next production duration upgrade cost? ')))
-extrbartime = round(31536000 / extrinf * (0.9 ** extrspeed), 15)
+extrbartime = 31536000 / extrinf * (0.9 ** extrspeed)
 extrbarstart = extrbartime
-speedbartime = round(31536000 / speedinf * (0.9 ** speedspeed), 15)
-prodbartime = round(31536000 / prodinf * (0.9 ** prodspeed), 15)
-speedincrease = 1.01
+speedbartime = 31536000 / speedinf * (0.9 ** speedspeed)
+prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
+speedincrease = 1
+prodincrease = 0
 extramount = 0.01
 priorextr = extrbartime
 priorspeed = speedbartime
@@ -37,15 +38,17 @@ priorprod = prodbartime
 charge = 0
 while charge < chargereq:
     while priorspeed < priorextr:
-        speedincrease = speedincrease + 0.01 * speedperc
-        priorextr = (priorextr - priorspeed) / (speedperc * 0.01 + 1) + priorspeed
+        priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
+        speedincrease = speedincrease + 0.01 * (speedperc + 2)
         extrbartime = extrbarstart / speedincrease
-        priorspeed = priorspeed + speedbartime 
+        priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
         extramount = extramount + round(0.01 * (1.05 + 0.025 * prodperc), 3)
+        prodincrease = prodincrease + prodperc * 0.025 + 0.05
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
+print(prodincrease * 100, speedincrease * 100)
 timesec = priorextr - extrbartime
 days = timesec // 86400
 timesec = timesec % 86400
