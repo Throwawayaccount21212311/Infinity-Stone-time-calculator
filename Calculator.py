@@ -2,29 +2,30 @@ import math
 
 
 def findupgrades(multiplier, number, nextprice):
-    cost = 0
     upgrades = -1
     if nextprice == 0:
         return 100
-    while cost < nextprice:
+    while upgrades < 100:
         upgrades = upgrades + 1
-        cost = math.floor(multiplier * number ** upgrades)
-        if upgrades == 100:
-            return upgrades
-        if cost == nextprice:
-            return upgrades
+        now = nextprice - math.floor(multiplier * number ** upgrades)
+        if now < 0:
+            if -now < nextprice - math.floor(multiplier * number ** (upgrades - 1)):
+                return upgrades
+            else:
+                return upgrades - 1
+    return 100
 
 
-extrinf = int(input('How many infinities do you have in extraction? '))
-speedinf = int(input('How many infinities do you have in speed? '))
-prodinf = int(input('How many infinities do you have in production? '))
+extrinf = int(float(input('How many infinities do you have in extraction? ')))
+speedinf = int(float(input('How many infinities do you have in speed? ')))
+prodinf = int(float(input('How many infinities do you have in production? ')))
 print('For the following questions, answer 0 if maxed.')
-chargereq = 1e12 * (0.95 ** findupgrades(25, 1.1, int(input('How much does the next charge required upgrade cost? '))))
-speedperc = findupgrades(10, 1.22, int(input('How much does the next speed bonus upgrade cost? ')))
-prodperc = findupgrades(8, 1.15, int(input('How much does the next production bonus upgrade cost? ')))
-extrspeed = findupgrades(15, 1.17, int(input('How much does the next extraction duration upgrade cost? ')))
-speedspeed = findupgrades(30, 1.22, int(input('How much does the next speed duration upgrade cost? ')))
-prodspeed = findupgrades(10, 1.15, int(input('How much does the next production duration upgrade cost? ')))
+chargereq = 1e12 * (0.95 ** findupgrades(25, 1.1, int(float(input('How much does the next charge required upgrade cost? ')))))
+speedperc = findupgrades(10, 1.22, int(float(input('How much does the next speed bonus upgrade cost? '))))
+prodperc = findupgrades(8, 1.15, int(float(input('How much does the next production bonus upgrade cost? '))))
+extrspeed = findupgrades(15, 1.17, int(float(input('How much does the next extraction tick upgrade cost? '))))
+speedspeed = findupgrades(30, 1.22, int(float(input('How much does the next speed tick upgrade cost? '))))
+prodspeed = findupgrades(10, 1.15, int(float(input('How much does the next production tick upgrade cost? '))))
 extrbartime = 31536000 / extrinf * (0.9 ** extrspeed)
 extrbarstart = extrbartime
 speedbartime = 31536000 / speedinf * (0.9 ** speedspeed)
@@ -46,7 +47,7 @@ while charge < chargereq:
         priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
         speedincrease = speedincrease + 0.01 * (speedperc + 2)
         extrbartime = extrbarstart / speedincrease
-        priorspeed = priorspeed + speedbartime 
+        priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
         prodincrease = prodincrease + prodperc * 0.025 + 0.05
         extramount = extramountstart * prodincrease
