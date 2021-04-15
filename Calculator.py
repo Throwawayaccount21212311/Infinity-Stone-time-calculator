@@ -40,7 +40,7 @@ priorprod = prodbartime
 charge = 0
 while charge < chargereq:
     while priorspeed < priorextr:
-        while priorprod < priorextr:
+        while priorprod < priorspeed:
             prodincrease = prodincrease + prodperc * 0.025 + 0.05
             extramount = extramountstart * prodincrease
             priorprod = priorprod + prodbartime
