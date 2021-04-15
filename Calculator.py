@@ -55,10 +55,4 @@ while charge < chargereq:
     charge = charge + extramount
     priorextr = priorextr + extrbartime
 timesec = priorextr - extrbartime
-days = timesec // 86400
-timesec = timesec % 86400
-hours = timesec // 3600
-timesec = timesec % 3600
-minutes = timesec // 60
-timesec = timesec % 60
-print(days, ' days, ', hours, ' hours, ', minutes, ' minutes, ', timesec, ' seconds.')
+print(timesec // 86400, ' days, ', timesec // 3600, ' hours, ', timesec // 60, ' minutes, ', timesec % 60, ' seconds.')
