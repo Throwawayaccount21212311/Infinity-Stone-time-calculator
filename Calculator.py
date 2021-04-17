@@ -49,10 +49,18 @@ while charge < chargereq:
         extrbartime = extrbarstart / speedincrease
         priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
+        while priorspeed < priorprod:
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
+            speedincrease = speedincrease + 0.01 * (speedperc + 2)
+            extrbartime = extrbarstart / speedincrease
+            priorspeed = priorspeed + speedbartime
+            if priorextr < priorprod:
+                break
         prodincrease = prodincrease + prodperc * 0.025 + 0.05
         extramount = extramountstart * prodincrease
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
+print(extramount, speedincrease * 100, prodincrease * 100)
 timesec = priorextr - extrbartime
 print(timesec // 86400, ' days, ', (timesec % 86400) // 3600, ' hours, ', (timesec % 3600) // 60, ' minutes, ', timesec % 60, ' seconds.')
