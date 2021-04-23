@@ -57,7 +57,7 @@ while charge < chargereq:
         if priorextr < priorprod:
             break
         prodincrease = prodincrease + prodperc * 0.025 + 0.05
-        extramount = prodincrease / 100 + 0.01
+        extramount = prodincrease / 100
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
