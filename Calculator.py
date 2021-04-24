@@ -1,3 +1,4 @@
+
 import math
 
 
@@ -33,22 +34,30 @@ prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
 speedincrease = 1
 prodincrease = 1
 extramount = 0.01
+counter = 0
 extramountstart = extramount
 priorextr = extrbartime
 priorspeed = speedbartime
 priorprod = prodbartime
 charge = 0.01
 while charge < chargereq:
-    while priorspeed <= priorextr:
-        while priorprod <= priorspeed:
+    while priorspeed < priorextr:
+        while priorprod < priorspeed:
             prodincrease = prodincrease + prodperc * 0.025 + 0.05
             extramount = prodincrease / 100 + 0.01
             priorprod = priorprod + prodbartime
-        priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
+            # Needs a rework.
+        counter = counter + 1
+        if counter == 1:
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02)) + priorspeed
+        elif counter == 2:
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02)) + priorspeed
+        else:
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
         speedincrease = speedincrease + 0.01 * (speedperc + 2)
         extrbartime = extrbarstart / speedincrease
         priorspeed = priorspeed + speedbartime
-    while priorprod <= priorextr:
+    while priorprod < priorextr:
         while priorspeed < priorprod:
             priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
             speedincrease = speedincrease + 0.01 * (speedperc + 2)
@@ -57,9 +66,10 @@ while charge < chargereq:
         if priorextr < priorprod:
             break
         prodincrease = prodincrease + prodperc * 0.025 + 0.05
-        extramount = prodincrease / 100
+        extramount = prodincrease / 100 + 0.01
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
+print(extramount, speedincrease * 100, prodincrease * 100)
 timesec = priorextr - extrbartime
 print(timesec // 86400, ' days, ', (timesec % 86400) // 3600, ' hours, ', (timesec % 3600) // 60, ' minutes, ', timesec % 60, ' seconds.')
