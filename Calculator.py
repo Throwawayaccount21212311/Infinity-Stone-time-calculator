@@ -68,6 +68,5 @@ while charge < chargereq:
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
-print(extramount, speedincrease * 100, prodincrease * 100)
 timesec = priorextr - extrbartime
 print(timesec // 86400, ' days, ', (timesec % 86400) // 3600, ' hours, ', (timesec % 3600) // 60, ' minutes, ', timesec % 60, ' seconds.')
