@@ -34,7 +34,7 @@ prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
 speedincrease = 1
 prodincrease = 1
 extramount = 0.01
-counter = 0
+counter = 1
 extramountstart = extramount
 priorextr = extrbartime
 priorspeed = speedbartime
@@ -46,20 +46,18 @@ while charge < chargereq:
             prodincrease = prodincrease + prodperc * 0.025 + 0.05
             extramount = prodincrease / 100 + 0.01
             priorprod = priorprod + prodbartime
-            # Needs a rework.
-        counter = counter + 1
+            # Following needs a rework.
         if counter == 1:
             priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02)) + priorspeed
-        elif counter == 2:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02)) + priorspeed
+            counter = 2
         else:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / (speedincrease / (speedperc * 0.01 + 0.02))) + priorspeed
         speedincrease = speedincrease + 0.01 * (speedperc + 2)
         extrbartime = extrbarstart / speedincrease
         priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
         while priorspeed < priorprod:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / speedincrease) + priorspeed
+            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / (speedincrease / (speedperc * 0.01 + 0.02))) + priorspeed
             speedincrease = speedincrease + 0.01 * (speedperc + 2)
             extrbartime = extrbarstart * speedincrease / 100
             priorspeed = priorspeed + speedbartime
@@ -70,5 +68,6 @@ while charge < chargereq:
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
+print(extramount, speedincrease * 100, prodincrease * 100)
 timesec = priorextr - extrbartime
 print(timesec // 86400, ' days, ', (timesec % 86400) // 3600, ' hours, ', (timesec % 3600) // 60, ' minutes, ', timesec % 60, ' seconds.')
