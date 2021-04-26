@@ -2,7 +2,7 @@
 
 A calculator for infinity stone charge time for the game 'The Perfect Tower 2'. Written in Python 3, feel free to change however you want. Can take anywhere between a few seconds and a few hours to run.
 
-###How to run
+### How to run
 First download the latest version of Python at https://www.python.org/downloads/
 
 Next, download the files here as a .zip and extract it.
