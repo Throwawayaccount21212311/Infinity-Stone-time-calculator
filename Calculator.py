@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import math
 
 
@@ -21,8 +23,8 @@ speedinf = int(float(input('How many infinities do you have in speed? ')))
 prodinf = int(float(input('How many infinities do you have in production? ')))
 print('For the following questions, answer 0 if maxed.')
 chargereq = 1e12 * (0.95 ** findupgrades(25, 1.1, int(float(input('How much does the next charge required upgrade cost? ')))))
-speedperc = findupgrades(10, 1.22, int(float(input('How much does the next speed bonus upgrade cost? '))))
-prodperc = findupgrades(8, 1.15, int(float(input('How much does the next production bonus upgrade cost? '))))
+speedperc = findupgrades(10, 1.22, int(float(input('How much does the next speed bonus upgrade cost? ')))) * 0.01 + 0.02
+prodperc = findupgrades(8, 1.15, int(float(input('How much does the next production bonus upgrade cost? ')))) * 0.025 + 0.05
 extrspeed = findupgrades(15, 1.17, int(float(input('How much does the next extraction tick upgrade cost? '))))
 speedspeed = findupgrades(30, 1.22, int(float(input('How much does the next speed tick upgrade cost? '))))
 prodspeed = findupgrades(10, 1.15, int(float(input('How much does the next production tick upgrade cost? '))))
@@ -42,28 +44,32 @@ charge = 0.01
 while charge < chargereq:
     while priorspeed < priorextr:
         while priorprod < priorspeed:
-            prodincrease = prodincrease + prodperc * 0.025 + 0.05
-            extramount = prodincrease / 100 + 0.01
+            prodincrease = prodincrease + prodperc
+            extramount = prodincrease / 100
             priorprod = priorprod + prodbartime
         # Following needs a rework.
+        speedincrease = speedincrease + speedperc
         if counter == 1:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02)) + priorspeed
-            counter = 2
+            priorextr = (priorextr - priorspeed) / (1 + speedperc) + priorspeed
+            counter = 0
         else:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / (speedincrease / (speedperc * 0.01 + 0.02))) + priorspeed
-        speedincrease = speedincrease + 0.01 * (speedperc + 2)
+            priorextr = (priorextr - priorspeed) * (((speedincrease - 1) / speedperc - 1) / ((speedincrease - 1) / speedperc)) + priorspeed
         extrbartime = extrbarstart / speedincrease
         priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
         while priorspeed < priorprod:
-            priorextr = (priorextr - priorspeed) / (1 + (speedperc * 0.01 + 0.02) / (speedincrease / (speedperc * 0.01 + 0.02))) + priorspeed
-            speedincrease = speedincrease + 0.01 * (speedperc + 2)
-            extrbartime = extrbarstart * speedincrease / 100
+            speedincrease = speedincrease + speedperc
+            if counter == 1:
+                priorextr = (priorextr - priorspeed) / (1 + speedperc) + priorspeed
+                counter = 0
+            else:
+                priorextr = (priorextr - priorspeed) * (((speedincrease - 1) / speedperc - 1) / ((speedincrease - 1) / speedperc)) + priorspeed
+            extrbartime = extrbarstart / speedincrease
             priorspeed = priorspeed + speedbartime
         if priorextr < priorprod:
             break
-        prodincrease = prodincrease + prodperc * 0.025 + 0.05
-        extramount = prodincrease / 100 + 0.01
+        prodincrease = prodincrease + prodperc
+        extramount = prodincrease / 100
         priorprod = priorprod + prodbartime
     charge = charge + extramount
     priorextr = priorextr + extrbartime
