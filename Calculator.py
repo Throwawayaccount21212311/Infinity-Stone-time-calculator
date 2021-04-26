@@ -57,17 +57,6 @@ while charge < chargereq:
         extrbartime = extrbarstart / speedincrease
         priorspeed = priorspeed + speedbartime
     while priorprod < priorextr:
-        while priorspeed < priorprod:
-            speedincrease = speedincrease + speedperc
-            if counter == 1:
-                priorextr = (priorextr - priorspeed) / (1 + speedperc) + priorspeed
-                counter = 0
-            else:
-                priorextr = (priorextr - priorspeed) * (((speedincrease - 1) / speedperc - 1) / ((speedincrease - 1) / speedperc)) + priorspeed
-            extrbartime = extrbarstart / speedincrease
-            priorspeed = priorspeed + speedbartime
-        if priorextr < priorprod:
-            break
         prodincrease = prodincrease + prodperc
         extramount = prodincrease / 100
         priorprod = priorprod + prodbartime
