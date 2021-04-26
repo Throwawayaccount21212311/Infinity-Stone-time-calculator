@@ -10,6 +10,6 @@ Next, download the files here as a .zip and extract it.
 
 Then go into the Command Prompt app and enter
 `Python3 (Enter path to Calculator.py here)`
-NOTE: The part in the brackets is not actually part of the command, you have to copy and paste the path to Calculator.py there. It should end in `\Calulator.py`  
+NOTE: The part in the brackets is not actually part of the command, you have to copy and paste the path to Calculator.py there. It should end in `\Calculator.py`  
 
 After that, simply input the right information and it'll start to run.
