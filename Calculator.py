@@ -3,15 +3,15 @@
 import math
 
 
-def findupgrades(multiplier, number, nextprice):
+def findupgrades(multiplier, base, nextprice):
     upgrades = -1
     if nextprice == 0:
         return 100
     while upgrades < 100:
         upgrades = upgrades + 1
-        now = nextprice - math.floor(multiplier * number ** upgrades)
+        now = nextprice - math.floor(multiplier * base ** upgrades)
         if now < 0:
-            if -now < nextprice - math.floor(multiplier * number ** (upgrades - 1)):
+            if -now < nextprice - math.floor(multiplier * base ** (upgrades - 1)):
                 return upgrades
             else:
                 return upgrades - 1
@@ -30,36 +30,38 @@ speedspeed = findupgrades(30, 1.22, int(float(input('How much does the next spee
 prodspeed = findupgrades(10, 1.15, int(float(input('How much does the next production tick upgrade cost? '))))
 extrbartime = 31536000 / extrinf * (0.9 ** extrspeed)
 extrbarstart = extrbartime
-speedbartime = 31536000 / speedinf * (0.9 ** speedspeed)
-prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
+if speedinf < 1:
+    speedbartime = 1.7e308
+else:
+    speedbartime = 31536000 / speedinf * (0.9 ** speedspeed)
+if prodinf < 1:
+    prodbartime = 1.7e308
+else:
+    prodbartime = 31536000 / prodinf * (0.9 ** prodspeed)
 speedincrease = 1
-prodincrease = 1
 extramount = 0.01
 counter = 1
-extramountstart = extramount
-priorextr = extrbartime
-priorspeed = speedbartime
-priorprod = prodbartime
+timeextr = extrbartime
+timespeed = speedbartime
+timeprod = prodbartime
 charge = 0.01
 while charge < chargereq:
-    while priorspeed <= priorextr:
-        while priorprod <= priorspeed:
-            prodincrease = prodincrease + prodperc
-            extramount = prodincrease / 100
-            priorprod = priorprod + prodbartime
+    while timespeed <= timeextr:
+        while timeprod <= timespeed:
+            extramount = prodperc / 100 + extramount
+            timeprod = timeprod + prodbartime
         speedincrease = speedincrease + speedperc
         if counter == 1:
-            priorextr = (priorextr - priorspeed) / (1 + speedperc) + priorspeed
+            timeextr = (timeextr - timespeed) / (1 + speedperc) + timespeed
             counter = 0
         else:
-            priorextr = (priorextr - priorspeed) * (((speedincrease - 1) / speedperc - 1) / ((speedincrease - 1) / speedperc)) + priorspeed
+            timeextr = (timeextr - timespeed) * (((speedincrease - 1) / speedperc - 1) / ((speedincrease - 1) / speedperc)) + timespeed
         extrbartime = extrbarstart / speedincrease
-        priorspeed = priorspeed + speedbartime
-    while priorprod <= priorextr:
-        prodincrease = prodincrease + prodperc
-        extramount = prodincrease / 100
-        priorprod = priorprod + prodbartime
+        timespeed = timespeed + speedbartime
+    while timeprod <= timeextr:
+        extramount = prodperc / 100 + extramount
+        timeprod = timeprod + prodbartime
     charge = charge + extramount
-    priorextr = priorextr + extrbartime
-timesec = priorextr - extrbartime
-print(timesec // 86400, ' days, ', (timesec % 86400) // 3600, ' hours, ', (timesec % 3600) // 60, ' minutes, ', timesec % 60, ' seconds.')
+    timeextr = timeextr + extrbartime
+timesec = timeextr - extrbartime
+print(timesec // 86400, 'days,', (timesec % 86400) // 3600, 'hours,', (timesec % 3600) // 60, 'minutes,', timesec % 60, 'seconds.')
