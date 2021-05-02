@@ -64,4 +64,5 @@ while charge < chargereq:
     charge = charge + extramount
     timeextr = timeextr + extrbartime
 timesec = timeextr - extrbartime
-print(timesec // 86400, 'days,', (timesec % 86400) // 3600, 'hours,', (timesec % 3600) // 60, 'minutes,', timesec % 60, 'seconds.')
+print('{0} day, {1} hours, {2} minutes, {3} seconds'.format(timesec // 86400, timesec % 86400 // 3600, timesec % 3600 // 60, timesec % 6))
+input('\nPress ENTER to exit: ')
