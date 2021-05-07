@@ -63,6 +63,6 @@ while charge < chargereq:
         timeprod = timeprod + prodbartime
     charge = charge + extramount
     timeextr = timeextr + extrbartime
-timesec = timeextr - extrbarstart
+timesec = timeextr - extrbartime
 print('{0} days, {1} hours, {2} minutes, {3} seconds'.format(timesec // 86400, timesec % 86400 // 3600, timesec % 3600 // 60, timesec % 60))
 input('\nPress ENTER to exit: ')
